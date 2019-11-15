@@ -2,6 +2,8 @@ package com.lambdaschool.usermodel.controllers;
 
 import com.lambdaschool.usermodel.models.Author;
 import com.lambdaschool.usermodel.services.BookStoreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +18,13 @@ import java.util.List;
 public class AuthorController {
     @Autowired
     private BookStoreService service;
-    /*
-    List<Book> getBooks();
 
-    List<Author> getAuthors();
-
-    Book updateBook(long bookid, Book newBook);
-
-    void addWrittenByToBook(long bookid, long authorid);
-
-    void removeBook(long bookid);
-    */
+    private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
 
     // http://localhost:2019/authors/authors
     @GetMapping(value = "/authors", produces = "application/json")
     ResponseEntity<?> getAuthors(){
+        logger.info("authors/authors Accessed");
         List<Author> authors = service.getAuthors();
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
