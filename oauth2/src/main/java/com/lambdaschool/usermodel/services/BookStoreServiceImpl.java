@@ -10,6 +10,7 @@ import com.lambdaschool.usermodel.repository.BookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service(value = "bookStoreService")
@@ -30,6 +31,7 @@ public class BookStoreServiceImpl implements BookStoreService {
         return authorRepo.findAll();
     }
 
+    @Transactional
     @Override
     public Book updateBook(long bookid, Book newBook) {
         Book currentBook = bookRepo.findByBookid(bookid);
@@ -60,6 +62,7 @@ public class BookStoreServiceImpl implements BookStoreService {
         return currentBook;
     }
 
+    @Transactional
     @Override
     public void addWrittenByToBook(long bookid, long authorid) {
         Book book = bookRepo.findByBookid(bookid);
@@ -73,6 +76,7 @@ public class BookStoreServiceImpl implements BookStoreService {
 
     }
 
+    @Transactional
     @Override
     public void removeBook(long bookid) {
         Book book = bookRepo.findByBookid(bookid);

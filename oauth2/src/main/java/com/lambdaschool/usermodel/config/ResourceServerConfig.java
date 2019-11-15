@@ -35,7 +35,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
                          "/swagger-ui.html",
                          "/v2/api-docs",
                          "/webjars/**",
-                         "/createnewuser")
+                         "/createnewuser", "/data/**", "/authors/**", "/books/**")
             .permitAll()
             .antMatchers("/users/**",
                          "/useremails/**",
