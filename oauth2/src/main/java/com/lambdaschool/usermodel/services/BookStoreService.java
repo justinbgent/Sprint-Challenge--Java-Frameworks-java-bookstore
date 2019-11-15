@@ -11,9 +11,9 @@ public interface BookStoreService {
 
     List<Author> getAuthors();
 
-    Book updateBook(long bookid);
+    Book updateBook(long bookid, Book newBook);
 
-    Wrote addWrittenByToBook(long bookid, long authorid);
+    void addWrittenByToBook(long bookid, long authorid);
 
     void removeBook(long bookid);
 }

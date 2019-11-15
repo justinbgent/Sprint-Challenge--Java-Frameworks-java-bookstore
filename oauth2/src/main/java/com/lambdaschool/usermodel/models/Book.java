@@ -21,6 +21,9 @@ public class Book extends Auditable{
 
     private int copy;
 
+    @Transient
+    public boolean copyHasValue = false;
+
     @ManyToMany
     @JsonIgnoreProperties("books")
     private List<Author> authors = new ArrayList<>();
@@ -73,6 +76,7 @@ public class Book extends Auditable{
     }
 
     public void setCopy(int copy) {
+        copyHasValue = true;
         this.copy = copy;
     }
 

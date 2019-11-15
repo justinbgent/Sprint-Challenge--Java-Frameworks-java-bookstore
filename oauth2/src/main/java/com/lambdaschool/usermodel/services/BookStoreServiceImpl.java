@@ -1,37 +1,86 @@
 package com.lambdaschool.usermodel.services;
 
+import com.lambdaschool.usermodel.exceptions.ResourceFoundException;
+import com.lambdaschool.usermodel.exceptions.ResourceNotFoundException;
 import com.lambdaschool.usermodel.models.Author;
 import com.lambdaschool.usermodel.models.Book;
 import com.lambdaschool.usermodel.models.Wrote;
+import com.lambdaschool.usermodel.repository.AuthorRepo;
+import com.lambdaschool.usermodel.repository.BookRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service(value = "bookStoreService")
 public class BookStoreServiceImpl implements BookStoreService {
+    @Autowired
+    AuthorRepo authorRepo;
+
+    @Autowired
+    BookRepo bookRepo;
 
     @Override
     public List<Book> getBooks() {
-        return null;
+        return bookRepo.findAll();
     }
 
     @Override
     public List<Author> getAuthors() {
-        return null;
+        return authorRepo.findAll();
     }
 
     @Override
-    public Book updateBook(long bookid) {
-        return null;
+    public Book updateBook(long bookid, Book newBook) {
+        Book currentBook = bookRepo.findByBookid(bookid);
+
+        if (newBook.getTitle() != null){
+            currentBook.setTitle(newBook.getTitle());
+        }
+
+        if (newBook.copyHasValue){
+            currentBook.setCopy(newBook.getCopy());
+        }
+
+        if (newBook.getISBN() != null){
+            currentBook.setISBN(newBook.getISBN());
+        }
+
+        if (newBook.getSection() != null){
+            currentBook.setSection(newBook.getSection());
+        }
+
+        if (newBook.getWriters().get(0) != null){
+            throw new ResourceFoundException("Writers are not assigned here. Go to /data/books/{bookid}/authors/{authorid} to add writers.");
+        }
+        if (newBook.getAuthors().get(0) != null){
+            throw new ResourceFoundException("Writers are not assigned here. Go to /data/books/{bookid}/authors/{authorid} to add writers.");
+        }
+
+        return currentBook;
     }
 
     @Override
-    public Wrote addWrittenByToBook(long bookid, long authorid) {
-        return null;
+    public void addWrittenByToBook(long bookid, long authorid) {
+        Book book = bookRepo.findByBookid(bookid);
+        Author author = authorRepo.findByAuthorid(authorid);
+
+        if (book.getTitle() != null && author.getFname() != null){
+            authorRepo.insertBookAuthorRelation(bookid, authorid);
+        }else {
+            throw new ResourceNotFoundException("Book or Author ID Doesn't Exist");
+        }
+
     }
 
     @Override
     public void removeBook(long bookid) {
+        Book book = bookRepo.findByBookid(bookid);
 
+        if (book.getTitle() != null){
+            bookRepo.delete(book);
+        }else{
+            throw new ResourceNotFoundException("Book ID Does not Exist");
+        }
     }
 }
