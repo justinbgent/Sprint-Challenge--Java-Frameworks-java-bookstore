@@ -52,14 +52,14 @@ public class BookStoreServiceImpl implements BookStoreService {
             currentBook.setSection(newBook.getSection());
         }
 
-        if (newBook.getWriters().get(0) != null){
+        if (newBook.getWriters().size() != 0){
             throw new ResourceFoundException("Writers are not assigned here. Go to /data/books/{bookid}/authors/{authorid} to add writers.");
         }
-        if (newBook.getAuthors().get(0) != null){
+        if (newBook.getAuthors().size() != 0){
             throw new ResourceFoundException("Writers are not assigned here. Go to /data/books/{bookid}/authors/{authorid} to add writers.");
         }
 
-        return currentBook;
+        return bookRepo.save(currentBook);
     }
 
     @Transactional
